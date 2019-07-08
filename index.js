@@ -16,18 +16,17 @@ server.get('/users', (req, res) => {
 
 server.post('/users', (req, res) => {
     const userData = req.body;
-
-    Users.insert(userData)
-        .then(user => {
-            if (user) {
+    if (!userData.name || !userData.bio) {
+        res.status(400).json({ success: false, message: "Please provide name and bio for the user." });
+    } else {
+        Users.insert(userData)
+            .then(user => {
                 res.status(201).json(user)
-            } else {
-                res.status(400).json({ message: "PLease provide name and bio for the user." });
-            }
-        })
-        .catch(err => {
-            res.status(500).json(err)
-        })
+            })
+            .catch(err => {
+                res.status(500).json(err)
+            })
+    }
 })
 
 server.delete('/users/:id', (req, res) => {

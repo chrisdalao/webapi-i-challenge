@@ -19,7 +19,11 @@ server.post('/users', (req, res) => {
 
     Users.insert(userData)
         .then(user => {
-            res.status(201).json(user)
+            if (user) {
+                res.status(201).json(user)
+            } else {
+                res.status(400).json({ message: "PLease provide name and bio for the user." });
+            }
         })
         .catch(err => {
             res.status(500).json(err)
